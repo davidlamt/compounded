@@ -23,9 +23,6 @@
           ".jsx"
         ]
       }
-    ],
-    "react/prefer-stateless-function": [
-      "off"
     ]
   },
   "plugins": [
