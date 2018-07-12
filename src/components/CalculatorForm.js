@@ -1,19 +1,10 @@
 import React, { Component } from 'react';
-import { Text, TextInput, View } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
+import { Field } from './common';
 
 const Container = styled.View`
   margin: 10px;
-`;
-
-const Label = styled.Text`
-  margin: 0 0 0 4px;
-`;
-
-const Input = styled.TextInput`
-  height: 50px;
-  padding: 0 5px;
-  font-size: 18px;
 `;
 
 class CalculatorForm extends Component {
@@ -27,19 +18,51 @@ class CalculatorForm extends Component {
     title: 'Compounded',
   };
 
+  state = {
+    annualInterestRateRef: null,
+    contributionAmt: null,
+    contributionFreq: null,
+    investmentLenRef: null,
+  };
+
   render() {
+    const {
+      annualInterestRateRef,
+      contributionAmt,
+      contributionFreq,
+      investmentLenRef,
+    } = this.state;
+
     return (
       <Container>
-        <Label>Initial Investment</Label>
-        <Input keyboardType="numeric" placeholder="$1000" />
-        <Label>Annual Interest Rate</Label>
-        <Input keyboardType="numeric" placeholder="6.5%" />
-        <Label>Investment Length</Label>
-        <Input keyboardType="numeric" placeholder="30 years" />
-        <Label>Contribution Frequency</Label>
-        <Input keyboardType="numeric" placeholder="Monthly" />
-        <Label>Contribution Amount</Label>
-        <Input keyboardType="numeric" placeholder="$100" />
+        <Field
+          label="Initial Investment"
+          nextField={annualInterestRateRef}
+          placeholder="$1000"
+        />
+        <Field
+          label="Annual Interest Rate"
+          nextField={investmentLenRef}
+          placeholder="6.5%"
+          getRef={ref => this.setState({ annualInterestRateRef: ref })}
+        />
+        <Field
+          label="Investment Length"
+          placeholder="30 years"
+          nextField={contributionFreq}
+          getRef={ref => this.setState({ investmentLenRef: ref })}
+        />
+        <Field
+          label="Contribution Frequency"
+          placeholder="Monthly"
+          nextField={contributionAmt}
+          getRef={ref => this.setState({ contributionFreq: ref })}
+        />
+        <Field
+          label="ContributionAmount"
+          placeholder="$100"
+          getRef={ref => this.setState({ contributionAmt: ref })}
+        />
       </Container>
     );
   }
