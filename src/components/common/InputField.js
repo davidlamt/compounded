@@ -19,7 +19,8 @@ class InputField extends Component {
     getRef: PropTypes.func,
     keyboardType: PropTypes.oneOf(['numeric']),
     label: PropTypes.string.isRequired,
-    nextField: PropTypes.node,
+    // eslint-disable-next-line react/forbid-prop-types
+    nextField: PropTypes.any,
     placeholder: PropTypes.string,
   };
 
