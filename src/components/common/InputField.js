@@ -13,7 +13,7 @@ const Input = styled.TextInput`
   font-size: 18px;
 `;
 
-class Field extends Component {
+class InputField extends Component {
   static propTypes = {
     blurOnSubmit: PropTypes.bool,
     getRef: PropTypes.func,
@@ -65,4 +65,4 @@ class Field extends Component {
   }
 }
 
-export default Field;
+export default InputField;
