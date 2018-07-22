@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { Picker, Text, View } from 'react-native';
 import styled from 'styled-components';
-import { InputField } from './common';
+import { InputField, SelectField } from './common';
 
 const Container = styled.View`
   margin: 10px;
@@ -21,7 +21,6 @@ class CalculatorForm extends Component {
   state = {
     annualInterestRateRef: null,
     contributionAmt: null,
-    contributionFreq: null,
     investmentLenRef: null,
   };
 
@@ -29,9 +28,15 @@ class CalculatorForm extends Component {
     const {
       annualInterestRateRef,
       contributionAmt,
-      contributionFreq,
       investmentLenRef,
     } = this.state;
+
+    const contributionFreqs = [
+      { label: 'Monthly', value: 'Monthly' },
+      { label: 'Quarterly', value: 'Quarterly' },
+      { label: 'Semiannually', value: 'Semiannually' },
+      { label: 'Annually', value: 'Annually' },
+    ];
 
     return (
       <Container>
@@ -49,17 +54,17 @@ class CalculatorForm extends Component {
         <InputField
           label="Investment Length"
           placeholder="30 years"
-          nextField={contributionFreq}
+          nextField={contributionAmt}
           getRef={ref => this.setState({ investmentLenRef: ref })}
         />
-        <InputField
+        <SelectField
+          data={contributionFreqs}
           label="Contribution Frequency"
-          placeholder="Monthly"
-          nextField={contributionAmt}
-          getRef={ref => this.setState({ contributionFreq: ref })}
+          onValueChange={() => {}}
+          selectedValue="Annually"
         />
         <InputField
-          label="ContributionAmount"
+          label="Contribution Amount"
           placeholder="$100"
           getRef={ref => this.setState({ contributionAmt: ref })}
         />
