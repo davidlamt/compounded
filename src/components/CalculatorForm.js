@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { updateField } from '../actions';
 import { Button, InputField, SelectField } from './common';
 
 const Container = styled.View`
   margin: 10px;
 `;
 
-class CalculatorForm extends Component {
+export class CalculatorForm extends Component {
   static navigationOptions = {
     headerStyle: {
       backgroundColor: '#0984e3',
@@ -16,6 +19,15 @@ class CalculatorForm extends Component {
       color: '#fff',
     },
     title: 'Compounded',
+  };
+
+  static propTypes = {
+    initInvestment: PropTypes.string,
+    updateField: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    initInvestment: null,
   };
 
   state = {
@@ -30,6 +42,7 @@ class CalculatorForm extends Component {
       contributionAmt,
       investmentLenRef,
     } = this.state;
+    const { initInvestment, updateField } = this.props;
 
     const contributionFreqs = [
       { label: 'Monthly', value: 'Monthly' },
@@ -43,7 +56,14 @@ class CalculatorForm extends Component {
         <InputField
           label="Initial Investment"
           nextField={annualInterestRateRef}
+          onChangeText={value =>
+            updateField({
+              prop: 'initInvestment',
+              value: parseInt(value, 10),
+            })
+          }
           placeholder="$1000"
+          value={initInvestment}
         />
         <InputField
           label="Annual Interest Rate"
@@ -74,4 +94,25 @@ class CalculatorForm extends Component {
   }
 }
 
-export default CalculatorForm;
+const mapStateToProps = state => {
+  const {
+    annualInterestRate,
+    contributionAmt,
+    contributionFreq,
+    initInvestment,
+    investmentLen,
+  } = state.fields;
+
+  return {
+    annualInterestRate,
+    contributionAmt,
+    contributionFreq,
+    initInvestment: initInvestment && initInvestment.toString(),
+    investmentLen,
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { updateField }
+)(CalculatorForm);
