@@ -21,15 +21,19 @@ class InputField extends Component {
     label: PropTypes.string.isRequired,
     // eslint-disable-next-line react/forbid-prop-types
     nextField: PropTypes.any,
+    onChangeText: PropTypes.func,
     placeholder: PropTypes.string,
+    value: PropTypes.string,
   };
 
   static defaultProps = {
     blurOnSubmit: false,
     getRef: null,
     keyboardType: 'numeric',
+    onChangeText: null,
     placeholder: '',
     nextField: null,
+    value: null,
   };
 
   setInputRef = ref => {
@@ -48,7 +52,9 @@ class InputField extends Component {
       keyboardType,
       label,
       nextField,
+      onChangeText,
       placeholder,
+      value,
     } = this.props;
 
     return (
@@ -56,10 +62,12 @@ class InputField extends Component {
         <Label onPress={() => this.inputRef.focus()}>{label}</Label>
         <Input
           blurOnSubmit={blurOnSubmit}
+          innerRef={this.setInputRef}
           keyboardType={keyboardType}
+          onChangeText={text => onChangeText && onChangeText(text)}
           onSubmitEditing={() => nextField && nextField.focus()}
           placeholder={placeholder}
-          innerRef={this.setInputRef}
+          value={value}
         />
       </View>
     );

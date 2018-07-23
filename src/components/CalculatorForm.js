@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { updateField } from '../actions';
 import { Button, InputField, SelectField } from './common';
 
 const Container = styled.View`
   margin: 10px;
 `;
 
-class CalculatorForm extends Component {
+export class CalculatorForm extends Component {
   static navigationOptions = {
     headerStyle: {
       backgroundColor: '#0984e3',
@@ -18,18 +21,43 @@ class CalculatorForm extends Component {
     title: 'Compounded',
   };
 
+  static propTypes = {
+    annualInterestRate: PropTypes.string,
+    contributionFreq: PropTypes.string,
+    contributionAmt: PropTypes.string,
+    initInvestment: PropTypes.string,
+    investmentLen: PropTypes.string,
+    updateField: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    annualInterestRate: null,
+    contributionFreq: 'Annually',
+    contributionAmt: null,
+    initInvestment: null,
+    investmentLen: null,
+  };
+
   state = {
     annualInterestRateRef: null,
-    contributionAmt: null,
+    contributionAmtRef: null,
     investmentLenRef: null,
   };
 
   render() {
     const {
       annualInterestRateRef,
-      contributionAmt,
+      contributionAmtRef,
       investmentLenRef,
     } = this.state;
+    const {
+      annualInterestRate,
+      contributionAmt,
+      contributionFreq,
+      initInvestment,
+      investmentLen,
+      updateField,
+    } = this.props;
 
     const contributionFreqs = [
       { label: 'Monthly', value: 'Monthly' },
@@ -43,30 +71,60 @@ class CalculatorForm extends Component {
         <InputField
           label="Initial Investment"
           nextField={annualInterestRateRef}
+          onChangeText={value =>
+            updateField({
+              prop: 'initInvestment',
+              value: parseInt(value, 10) || null,
+            })
+          }
           placeholder="$1000"
+          value={initInvestment}
         />
         <InputField
+          getRef={ref => this.setState({ annualInterestRateRef: ref })}
           label="Annual Interest Rate"
           nextField={investmentLenRef}
+          onChangeText={value =>
+            updateField({
+              prop: 'annualInterestRate',
+              value: parseInt(value, 10) || null,
+            })
+          }
           placeholder="6.5%"
-          getRef={ref => this.setState({ annualInterestRateRef: ref })}
+          value={annualInterestRate}
         />
         <InputField
-          label="Investment Length"
-          placeholder="30 years"
-          nextField={contributionAmt}
           getRef={ref => this.setState({ investmentLenRef: ref })}
+          label="Investment Length"
+          onChangeText={value =>
+            updateField({
+              prop: 'investmentLen',
+              value: parseInt(value, 10) || null,
+            })
+          }
+          placeholder="30 years"
+          nextField={contributionAmtRef}
+          value={investmentLen}
         />
         <SelectField
           data={contributionFreqs}
           label="Contribution Frequency"
-          onValueChange={() => {}}
-          selectedValue="Annually"
+          onValueChange={selection =>
+            updateField({ prop: 'contributionFreq', value: selection })
+          }
+          selectedValue={contributionFreq}
         />
         <InputField
+          getRef={ref => this.setState({ contributionAmtRef: ref })}
           label="Contribution Amount"
+          onChangeText={value =>
+            updateField({
+              prop: 'contributionAmt',
+              value: parseInt(value, 10) || null,
+            })
+          }
           placeholder="$100"
-          getRef={ref => this.setState({ contributionAmt: ref })}
+          value={contributionAmt}
         />
         <Button label="Calculate" onPress={() => {}} />
       </Container>
@@ -74,4 +132,25 @@ class CalculatorForm extends Component {
   }
 }
 
-export default CalculatorForm;
+const mapStateToProps = state => {
+  const {
+    annualInterestRate,
+    contributionAmt,
+    contributionFreq,
+    initInvestment,
+    investmentLen,
+  } = state.fields;
+
+  return {
+    annualInterestRate: annualInterestRate && annualInterestRate.toString(),
+    contributionAmt: contributionAmt && contributionAmt.toString(),
+    contributionFreq,
+    initInvestment: initInvestment && initInvestment.toString(),
+    investmentLen: investmentLen && investmentLen.toString(),
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  { updateField }
+)(CalculatorForm);
