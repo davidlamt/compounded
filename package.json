@@ -25,6 +25,9 @@
     "test": "jest"
   },
   "jest": {
+    "moduleNameMapper": {
+      "styled-components": "<rootDir>/node_modules/styled-components/dist/styled-components.native.cjs.js"
+    },
     "preset": "jest-expo"
   },
   "dependencies": {
