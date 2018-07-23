@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { Picker, Text, View } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
-import { InputField, SelectField } from './common';
+import { Button, InputField, SelectField } from './common';
 
 const Container = styled.View`
   margin: 10px;
@@ -68,6 +68,7 @@ class CalculatorForm extends Component {
           placeholder="$100"
           getRef={ref => this.setState({ contributionAmt: ref })}
         />
+        <Button label="Calculate" onPress={() => {}} />
       </Container>
     );
   }
