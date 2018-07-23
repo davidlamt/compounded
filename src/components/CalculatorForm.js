@@ -23,6 +23,8 @@ export class CalculatorForm extends Component {
 
   static propTypes = {
     annualInterestRate: PropTypes.string,
+    contributionFreq: PropTypes.string,
+    contributionAmt: PropTypes.string,
     initInvestment: PropTypes.string,
     investmentLen: PropTypes.string,
     updateField: PropTypes.func.isRequired,
@@ -30,6 +32,8 @@ export class CalculatorForm extends Component {
 
   static defaultProps = {
     annualInterestRate: null,
+    contributionFreq: 'Annually',
+    contributionAmt: null,
     initInvestment: null,
     investmentLen: null,
   };
@@ -49,6 +53,7 @@ export class CalculatorForm extends Component {
     const {
       annualInterestRate,
       contributionAmt,
+      contributionFreq,
       initInvestment,
       investmentLen,
       updateField,
@@ -104,8 +109,10 @@ export class CalculatorForm extends Component {
         <SelectField
           data={contributionFreqs}
           label="Contribution Frequency"
-          onValueChange={() => {}}
-          selectedValue="Annually"
+          onValueChange={selection =>
+            updateField({ prop: 'contributionFreq', value: selection })
+          }
+          selectedValue={contributionFreq}
         />
         <InputField
           getRef={ref => this.setState({ contributionAmtRef: ref })}
